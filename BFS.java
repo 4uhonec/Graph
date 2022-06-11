@@ -1,6 +1,5 @@
 import java.security.SecureRandom;
 import java.util.*;
-import java.util.concurrent.SynchronousQueue;
 
 public class BFS<E> {
     private final boolean bidirectional;
@@ -46,24 +45,44 @@ public class BFS<E> {
 
     //build BFS from start element
     public void init(){
-        Queue<E> fifo = new LinkedList<>();
-        E current = startElement;
-        fifo.add(current);
         Set<E> visited = new HashSet<>();
-        visited.add(current);
-
-        while(!fifo.isEmpty()){
-            current = fifo.poll();
-            List<E> layer = new ArrayList<>();
-            for(E e: graph.get(current).keySet()){
-                if(!visited.contains(e)){
-                    visited.add(e);
-                    layer.add(e);
-                    fifo.add(e);
+        visited.add(startElement);
+        List<E> layer = new ArrayList<>();
+        layer.add(startElement);
+        layers.add(new ArrayList<>(layer));
+        List<E> neighbors = new ArrayList<>();
+        while(!layer.isEmpty()){
+            for(E el: layer){
+                for(E neighbor: graph.get(el).keySet()){
+                    if(!visited.contains(neighbor)){
+                        neighbors.add(neighbor);
+                        visited.add(neighbor);
+                    }
                 }
             }
-            if(!layer.isEmpty())
-                layers.add(layer);
+            if(neighbors.isEmpty())
+                break;
+            layers.add(new ArrayList<>(neighbors));
+            layer.clear();
+            layer.addAll(neighbors);
+            neighbors.clear();
         }
+    }
+
+    public List<List<E>> getBFS(){
+        return layers;
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder bld = new StringBuilder();
+        for(List<E> list: layers){
+            for(E el: list){
+                bld.append(el);
+                bld.append(" ");
+            }
+            bld.append("\n");
+        }
+        return bld.toString();
     }
 }

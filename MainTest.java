@@ -1,6 +1,6 @@
 public class MainTest {
     public static void main(String[] args) {
-        Graph<Integer> integerGraph = new Graph<>(false, true);//add check for weighted
+        Graph<Integer> integerGraph = new Graph<>(true, true);//add check for weighted
         Graph<Integer> integerGraph1 = new Graph<>(false, false);//add check for weighted
 
         integerGraph.addEdge(1,2,15);
@@ -22,7 +22,7 @@ public class MainTest {
         integerGraph1.addEdge(10,9,6);
         integerGraph1.addEdge(4,7,7);
         integerGraph1.addEdge(3,9,7);
-        integerGraph1.removeEdge(4,10);
+        //integerGraph1.removeEdge(4,10);
 
         //System.out.println(integerGraph);
         //System.out.println(integerGraph.vertexCount());
@@ -33,5 +33,8 @@ public class MainTest {
         System.out.println(copy);
 
         System.out.println(integerGraph1);*/
+
+        BFS bfs = new BFS(integerGraph, 1);
+        System.out.println(bfs);
     }
 }
