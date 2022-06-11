@@ -8,6 +8,7 @@ public class BFS<E> {
     //map prev? +speed, -space
     private final E startElement;
     private E endElement;
+    private Set<E> visited = new HashSet<>();
     private List<List<E>> layers= new ArrayList<>();
 
     public BFS(Graph<E> graph, E startElement){
@@ -45,7 +46,6 @@ public class BFS<E> {
 
     //build BFS from start element
     public void init(){
-        Set<E> visited = new HashSet<>();
         visited.add(startElement);
         List<E> layer = new ArrayList<>();
         layer.add(startElement);
@@ -84,5 +84,47 @@ public class BFS<E> {
             bld.append("\n");
         }
         return bld.toString();
+    }
+
+    public List<E> getPath(){
+        if(endElement == null)
+            throw new RuntimeException("No end element specified, call getPath(E endElement)");
+        if(!visited.contains(endElement))
+            return null;
+        List<E> result = new ArrayList<>();
+        if(endElement == startElement){
+            result.add(startElement);
+            return result;
+        }
+        int len = layers.size();
+        List<E> reversedRes = new ArrayList<>();
+        reversedRes.add(endElement);
+        E current = endElement;
+        for(int i = len - 1; i>0; i--){
+            for(E el: layers.get(i - 1)){
+                if(graph.get(el).containsKey(current) && layers.get(i).contains(current)){
+                    reversedRes.add(el);
+                    current = el;
+                    break;
+                }
+            }
+        }
+
+        //reverse rev->result
+
+
+        for(int i = reversedRes.size() - 1; i>=0; i--){
+            result.add(reversedRes.get(i));
+        }
+        if(result.isEmpty())
+            return null;
+        return result;
+    }
+
+    public List<E> getPath(E end){
+        if(!graph.containsKey(end))
+            throw new RuntimeException("Graph does not contain element " + end);
+        endElement = end;
+        return getPath();
     }
 }
