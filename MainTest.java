@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class MainTest {
     public static void main(String[] args) {
         Graph<Integer> integerGraph = new Graph<>(true, true);//add check for weighted
@@ -12,6 +14,7 @@ public class MainTest {
         integerGraph.addEdge(10,9,6);
         integerGraph.addEdge(4,7,7);
         integerGraph.addEdge(3,9,7);
+        integerGraph.addEdge(11,12,1);
 
         testGraph.addEdge(1,3);
         testGraph.addEdge(1,2);
@@ -20,7 +23,7 @@ public class MainTest {
         testGraph.addEdge(3,6);
         testGraph.addEdge(3,4);
         testGraph.addEdge(4,5);
-        testGraph.addEdge(1,3);
+        testGraph.addEdge(7,3);
         testGraph.addEdge(4,8);
         testGraph.addEdge(8,7);
         testGraph.addEdge(7,11);
@@ -38,11 +41,25 @@ public class MainTest {
         System.out.println(copy);
 
         System.out.println(integerGraph1);*/
+		//TODO: add to Graph funcs BFS,Dijkstra, ..
+        BFS bfs = new BFS(integerGraph);
+        BFS bfs1 = new BFS(testGraph);
+        Dijkstra di = new Dijkstra(integerGraph);
+        
+        int start = 2;
+        int end = 10;
 
-        BFS bfs = new BFS(integerGraph, 1);
-        BFS bfs1 = new BFS(testGraph, 1);
-        System.out.println(bfs);
-        System.out.println(bfs1);
-        System.out.println(bfs1.getPath(2).toString());
+		System.out.println("bfs test from "+start+" to "+end);
+        System.out.println(bfs1.findPath(start, end).toString());
+
+		System.out.println("dijkstra from "+start);
+
+		Map<Integer, Integer> map = new HashMap<>(di.getDist(start));
+
+		for(Integer el: map.keySet()){
+			System.out.println(el+": "+map.get(el));
+		}
+
+		System.out.println("Number of components: "+integerGraph.countComponents());
     }
 }

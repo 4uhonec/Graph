@@ -2,50 +2,39 @@ import java.security.SecureRandom;
 import java.util.*;
 
 public class BFS<E> {
-    private final boolean bidirectional;
-    private final boolean weighted;
-    private final Map<E, HashMap<E, Integer>> graph;
+    private final Map<E, HashMap<E, Integer>> graphMap;
+    private final Graph graph;
     //map prev? +speed, -space
-    private final E startElement;
+    private E startElement;
     private E endElement;
     private Set<E> visited = new HashSet<>();
     private List<List<E>> layers= new ArrayList<>();
 
-    public BFS(Graph<E> graph, E startElement){
-        if(!graph.getGraph().containsKey(startElement))
-            throw new RuntimeException("no such start element in graph");
-        this.graph = graph.getGraph();
-        this.startElement = startElement;
-        this.bidirectional = graph.isBidirectional();
-        this.weighted = graph.isWeighted();
-        init();
-    }
-
-    public BFS(Graph<E> graph, E startElement, E endElement){
-        this(graph, startElement);
-        if(!graph.getGraph().containsKey(endElement))
-            throw new RuntimeException("no such end element in graph");
-        this.endElement = endElement;
-    }
-
     public BFS(Graph<E> graph){
-        this.graph = graph.getGraph();
-        this.startElement = pickRandomVertex();
-        this.bidirectional = graph.isBidirectional();
-        this.weighted = graph.isWeighted();
-        init();
+        this.graphMap = graph.getGraph();
+        this.graph = graph;
     }
 
     //used when root vertex is not passed in constructor
     private E pickRandomVertex(){
         SecureRandom rnd = new SecureRandom();
-        List<E> keys = new ArrayList<>(graph.keySet());
+        List<E> keys = new ArrayList<>(graphMap.keySet());
         E element = keys.get(rnd.nextInt(keys.size()));
         return element;
     }
 
+	private void clearVisited(){
+		visited.clear();
+	}
+
+	public void setStart(E start){
+		if(!graphMap.containsKey(start))
+			throw new RuntimeException("No such start el "+start);
+		this.startElement = start;
+	}
+	
     //build BFS from start element
-    public void init(){
+    private void buildBfs(){
         visited.add(startElement);
         List<E> layer = new ArrayList<>();
         layer.add(startElement);
@@ -53,7 +42,7 @@ public class BFS<E> {
         List<E> neighbors = new ArrayList<>();
         while(!layer.isEmpty()){
             for(E el: layer){
-                for(E neighbor: graph.get(el).keySet()){
+                for(E neighbor: graphMap.get(el).keySet()){
                     if(!visited.contains(neighbor)){
                         neighbors.add(neighbor);
                         visited.add(neighbor);
@@ -68,8 +57,11 @@ public class BFS<E> {
             neighbors.clear();
         }
     }
-
-    public List<List<E>> getBFS(){
+	
+    public List<List<E>> getBfs(E start){
+		startElement = start;
+		layers.clear();
+		buildBfs();
         return layers;
     }
 
@@ -86,9 +78,13 @@ public class BFS<E> {
         return bld.toString();
     }
 
-    public List<E> getPath(){
+    public List<E> findPath(){//init
+		if(startElement == null)
+			throw new RuntimeException("No start element specified");
         if(endElement == null)
-            throw new RuntimeException("No end element specified, call getPath(E endElement)");
+            throw new RuntimeException("No end element specified");
+		layers.clear();
+		buildBfs();
         if(!visited.contains(endElement))
             return null;
         List<E> result = new ArrayList<>();
@@ -97,34 +93,32 @@ public class BFS<E> {
             return result;
         }
         int len = layers.size();
-        List<E> reversedRes = new ArrayList<>();
-        reversedRes.add(endElement);
+        result.add(endElement);
         E current = endElement;
         for(int i = len - 1; i>0; i--){
             for(E el: layers.get(i - 1)){
-                if(graph.get(el).containsKey(current) && layers.get(i).contains(current)){
-                    reversedRes.add(el);
+                if(graphMap.get(el).containsKey(current) && layers.get(i).contains(current)){
+                    result.add(el);
                     current = el;
                     break;
                 }
             }
         }
 
-        //reverse rev->result
+		Collections.reverse(result);
 
-
-        for(int i = reversedRes.size() - 1; i>=0; i--){
-            result.add(reversedRes.get(i));
-        }
         if(result.isEmpty())
             return null;
         return result;
     }
 
-    public List<E> getPath(E end){
-        if(!graph.containsKey(end))
+    public List<E> findPath(E start, E end){
+		if(!graphMap.containsKey(start))
+			throw new RuntimeException("Graph does not contain element " + start);
+        if(!graphMap.containsKey(end))
             throw new RuntimeException("Graph does not contain element " + end);
+        startElement = start;    
         endElement = end;
-        return getPath();
+        return findPath();
     }
 }

@@ -4,7 +4,7 @@ import java.util.*;
 public class Graph<E>{
     private boolean bidirectional;
     private boolean weighted;
-    private Map<E, HashMap<E, Integer>> graph = new HashMap<>();
+    private HashMap<E, HashMap<E, Integer>> graph = new HashMap<>();
 
     public Graph(){
         this(true, false);
@@ -56,7 +56,7 @@ public class Graph<E>{
         }
     }
 
-    public List<E> getVertexes(){
+    public List<E> getVertexes(){//TODO: add directed
         return new ArrayList<>(graph.keySet());
     }
 
@@ -89,13 +89,17 @@ public class Graph<E>{
         return graph.size();
     }
 
-    public void copy(Graph<E> g){
-        this.graph = new HashMap<>(g.getGraph());
-        setDirection(g.isBidirectional());
-        setWeighted(g.isWeighted());
+    public Graph copy(){
+        Graph copy = new Graph(isBidirectional(), isWeighted());
+        for(E from: graph.keySet()){
+			for(E to: graph.get(from).keySet()){
+        		copy.addEdge(from, to, graph.get(from).get(to));
+        	}
+        }
+        return copy;
     }
 
-    public Map<E, HashMap<E, Integer>> getGraph(){
+    public HashMap<E, HashMap<E, Integer>> getGraph(){
         return this.graph;
     }
 
@@ -104,7 +108,7 @@ public class Graph<E>{
     }
 
     public void setDirection(boolean bidirectional) {
-        this.bidirectional = bidirectional;
+        this.bidirectional = bidirectional;//TODO: add checks and conversion dir->bi
     }
 
     public boolean isWeighted() {
@@ -115,21 +119,56 @@ public class Graph<E>{
         this.weighted = weighted;
     }
 
-    public void BFS(){
-
+    public void setWeight(E from, E to, int weight){
+    	if(graph.containsKey(from)){
+    		if(graph.get(from).containsKey(to)){
+    			graph.get(from).put(to, weight);
+    		}
+    	}
+    	if(isBidirectional()){
+    		if(graph.containsKey(to)){
+    			if(graph.get(to).containsKey(from)){
+    				graph.get(to).put(from,weight);
+    			}
+    		}
+    	}
     }
 
-    public void BFS(E e){
-
+    public void setBidirectional(){
+    	this.bidirectional = true;
     }
 
-    public void DFS(){
-
+    public Graph getBidirectional(){//TODO: finish, need this to count components in graph
+    	Graph res = this.copy();
+		if(res.isBidirectional())
+			return res;
+		res.setBidirectional();
+		
+		HashMap<E,HashMap<E,Integer>> map = res.getGraph();
+		for(E from: map.keySet()){
+			for(E to: map.get(from).keySet()){
+				res.addEdge(to, from, map.get(from).get(to));
+			}
+		}
+    	return res;
     }
 
-    public void DFS(E e){
-
+    public int countComponents(){
+    	int count = 0;
+    	Graph gr = this.getBidirectional();
+    	BFS bfs = new BFS(this);
+		Set<E> visited = new HashSet<>();
+		for(E el: (Set<E>)gr.getGraph().keySet()){
+			if(!visited.contains(el)){
+				List<List<E>> lists = bfs.getBfs(el);
+				for(List<E> list: lists){
+					for(E vertex: list){
+						visited.add(vertex);
+					}
+				}
+				count++;
+			}
+		}
+    	return count;
     }
-
-
 }
