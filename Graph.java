@@ -1,10 +1,10 @@
 import java.util.*;
 
-//only implemented for int weights
-public class Graph<E>{
+
+public class Graph<E,K extends Number>{
     private boolean bidirectional;
     private boolean weighted;
-    private HashMap<E, HashMap<E, Integer>> graph = new HashMap<>();
+    private HashMap<E, HashMap<E, K>> graph = new HashMap<>();
 
     public Graph(){
         this(true, false);
@@ -21,10 +21,10 @@ public class Graph<E>{
     }
 
     public void addEdge(E from, E to){
-        addEdge(from, to, 0);
+        addEdge(from, to, (K)Integer.valueOf(0));
     }
 
-    public void addEdge(E from, E to, int w){
+    public void addEdge(E from, E to, K w){
         if(!graph.containsKey(from)){
             addVertex(from);
         }
@@ -89,8 +89,8 @@ public class Graph<E>{
         return graph.size();
     }
 
-    public Graph<E> copy(){
-        Graph<E> copy = new Graph<>(isBidirectional(), isWeighted());
+    public Graph<E,K> copy(){
+        Graph<E,K> copy = new Graph<>(isBidirectional(), isWeighted());
         for(E from: graph.keySet()){
 			for(E to: graph.get(from).keySet()){
         		copy.addEdge(from, to, graph.get(from).get(to));
@@ -99,7 +99,7 @@ public class Graph<E>{
         return copy;
     }
 
-    public HashMap<E, HashMap<E, Integer>> getGraph(){
+    public HashMap<E, HashMap<E,K>> getGraph(){
         return this.graph;
     }
 
@@ -119,7 +119,7 @@ public class Graph<E>{
         this.weighted = weighted;
     }
 
-    public void setWeight(E from, E to, int weight){
+    public void setWeight(E from, E to, K weight){
     	if(graph.containsKey(from)){
     		if(graph.get(from).containsKey(to)){
     			graph.get(from).put(to, weight);
@@ -138,13 +138,13 @@ public class Graph<E>{
     	this.bidirectional = true;
     }
 
-    public Graph<E> getBidirectional(){
-    	Graph<E> res = this.copy();
+    public Graph<E,K> getBidirectional(){
+    	Graph<E,K> res = this.copy();
 		if(res.isBidirectional())
 			return res;
 		res.setBidirectional();
 		
-		HashMap<E,HashMap<E,Integer>> map = res.getGraph();
+		HashMap<E,HashMap<E,K>> map = res.getGraph();
 		for(E from: map.keySet()){
 			for(E to: map.get(from).keySet()){
 				res.addEdge(to, from, map.get(from).get(to));
@@ -155,8 +155,8 @@ public class Graph<E>{
 
     public int countComponents(){
     	int count = 0;
-    	Graph<E> gr = this.getBidirectional();
-    	BFS<E> bfs = new BFS<E>(this);
+    	Graph<E,K> gr = this.getBidirectional();
+    	BFS<E,K> bfs = new BFS<E,K>(this);
 		Set<E> visited = new HashSet<>();
 		for(E el: (Set<E>)gr.getGraph().keySet()){
 			if(!visited.contains(el)){
@@ -171,9 +171,9 @@ public class Graph<E>{
     }
 
     //TODO: finish getComponents()
-    //returns list of
-    public List<Graph<E>> getComponents(){
-        List<Graph<E>> result = new ArrayList<>();
+    //returns list of Graph<E>
+    public List<Graph<E,K>> getComponents(){
+        List<Graph<E,K>> result = new ArrayList<>();
 
         return result;
     }

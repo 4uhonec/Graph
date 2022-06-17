@@ -2,8 +2,8 @@ import java.util.*;
 
 public class MainTest {
     public static void main(String[] args) {
-        Graph<Integer> integerGraph = new Graph<>(true, true);//add check for weighted
-        Graph<Integer> testGraph = new Graph<>(false, false);//add check for weighted
+        Graph<Integer, Integer> integerGraph = new Graph<>(true, true);//add check for weighted
+        Graph<Integer, Integer> testGraph = new Graph<>(false, false);//add check for weighted
 
         integerGraph.addEdge(1,2,15);
         integerGraph.addEdge(3,2,2);
@@ -41,8 +41,8 @@ public class MainTest {
 
         System.out.println(integerGraph1);*/
 		//TODO: add to Graph funcs BFS,Dijkstra, ..
-        BFS<Integer> bfs = new BFS<>(integerGraph);
-        BFS<Integer> bfs1 = new BFS<>(testGraph);
+        BFS<Integer, Integer> bfs = new BFS<>(integerGraph);
+        BFS<Integer, Integer> bfs1 = new BFS<>(testGraph);
         Dijkstra<Integer> di = new Dijkstra<>(integerGraph);
         
         int start = 2;

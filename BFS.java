@@ -2,15 +2,15 @@ import java.security.SecureRandom;
 import java.util.*;
 
 
-public class BFS<E> {
-    private final HashMap<E, HashMap<E, Integer>> graphMap;
+public class BFS<E,K extends Number> {
+    private final HashMap<E, HashMap<E,K>> graphMap;
     //map prev? +speed, -space
     private E startElement;
     private E endElement;
     private Set<E> visited = new HashSet<>();
     private List<List<E>> layers= new ArrayList<>();
 
-    public BFS(Graph<E> graph){
+    public BFS(Graph<E,K> graph){
         this.graphMap = graph.getGraph();
     }
 
