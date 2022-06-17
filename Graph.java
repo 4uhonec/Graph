@@ -89,8 +89,8 @@ public class Graph<E>{
         return graph.size();
     }
 
-    public Graph copy(){
-        Graph copy = new Graph(isBidirectional(), isWeighted());
+    public Graph<E> copy(){
+        Graph<E> copy = new Graph<>(isBidirectional(), isWeighted());
         for(E from: graph.keySet()){
 			for(E to: graph.get(from).keySet()){
         		copy.addEdge(from, to, graph.get(from).get(to));
@@ -108,7 +108,7 @@ public class Graph<E>{
     }
 
     public void setDirection(boolean bidirectional) {
-        this.bidirectional = bidirectional;//TODO: add checks and conversion dir->bi
+        this.bidirectional = bidirectional;//TODO: add checks
     }
 
     public boolean isWeighted() {
@@ -138,8 +138,8 @@ public class Graph<E>{
     	this.bidirectional = true;
     }
 
-    public Graph getBidirectional(){//TODO: finish, need this to count components in graph
-    	Graph res = this.copy();
+    public Graph<E> getBidirectional(){
+    	Graph<E> res = this.copy();
 		if(res.isBidirectional())
 			return res;
 		res.setBidirectional();
@@ -155,20 +155,26 @@ public class Graph<E>{
 
     public int countComponents(){
     	int count = 0;
-    	Graph gr = this.getBidirectional();
-    	BFS bfs = new BFS(this);
+    	Graph<E> gr = this.getBidirectional();
+    	BFS<E> bfs = new BFS<E>(this);
 		Set<E> visited = new HashSet<>();
 		for(E el: (Set<E>)gr.getGraph().keySet()){
 			if(!visited.contains(el)){
 				List<List<E>> lists = bfs.getBfs(el);
 				for(List<E> list: lists){
-					for(E vertex: list){
-						visited.add(vertex);
-					}
+                    visited.addAll(list);
 				}
 				count++;
 			}
 		}
     	return count;
+    }
+
+    //TODO: finish getComponents()
+    //returns list of
+    public List<Graph<E>> getComponents(){
+        List<Graph<E>> result = new ArrayList<>();
+
+        return result;
     }
 }

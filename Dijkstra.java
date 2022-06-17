@@ -29,7 +29,7 @@ public class Dijkstra<E>{
 				result.put(el, Integer.MAX_VALUE);
 			}
 		}
-		result.put(start, 0);//check if start prrsent
+		result.put(start, 0);
 
 		PriorityQueue<E> minHeap = new PriorityQueue<>(
 			(a,b) -> result.get(a) - result.get(b)
@@ -50,5 +50,11 @@ public class Dijkstra<E>{
 		}
 		
 		return result;
+	}
+
+	public List<E> getPath(){
+		List<E> res = new ArrayList<>();
+
+		return res;
 	}
 }

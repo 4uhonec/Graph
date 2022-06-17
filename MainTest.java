@@ -36,15 +36,14 @@ public class MainTest {
         //System.out.println(integerGraph.vertexCount());
         //System.out.println(integerGraph.edgeCount());
 
-        /*Graph<Integer> copy = new Graph<>();
-        copy.copy(integerGraph);
+        /*Graph copy = integerGraph.copy();
         System.out.println(copy);
 
         System.out.println(integerGraph1);*/
 		//TODO: add to Graph funcs BFS,Dijkstra, ..
-        BFS bfs = new BFS(integerGraph);
-        BFS bfs1 = new BFS(testGraph);
-        Dijkstra di = new Dijkstra(integerGraph);
+        BFS<Integer> bfs = new BFS<>(integerGraph);
+        BFS<Integer> bfs1 = new BFS<>(testGraph);
+        Dijkstra<Integer> di = new Dijkstra<>(integerGraph);
         
         int start = 2;
         int end = 10;

@@ -1,9 +1,9 @@
 import java.security.SecureRandom;
 import java.util.*;
 
+
 public class BFS<E> {
-    private final Map<E, HashMap<E, Integer>> graphMap;
-    private final Graph graph;
+    private final HashMap<E, HashMap<E, Integer>> graphMap;
     //map prev? +speed, -space
     private E startElement;
     private E endElement;
@@ -12,7 +12,6 @@ public class BFS<E> {
 
     public BFS(Graph<E> graph){
         this.graphMap = graph.getGraph();
-        this.graph = graph;
     }
 
     //used when root vertex is not passed in constructor
@@ -78,7 +77,7 @@ public class BFS<E> {
         return bld.toString();
     }
 
-    public List<E> findPath(){//init
+    public List<E> findPath(){
 		if(startElement == null)
 			throw new RuntimeException("No start element specified");
         if(endElement == null)
