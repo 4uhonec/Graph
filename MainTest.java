@@ -1,8 +1,10 @@
 import java.util.*;
 
+
+
 public class MainTest {
     public static void main(String[] args) {
-        Graph<Integer, Integer> integerGraph = new Graph<>(true, true);//add check for weighted
+        Graph<Integer, Integer> integerGraph = new Graph<>(false, true);//add check for weighted
         Graph<Integer, Integer> testGraph = new Graph<>(false, false);//add check for weighted
 
         integerGraph.addEdge(1,2,15);
@@ -15,6 +17,7 @@ public class MainTest {
         integerGraph.addEdge(4,7,7);
         integerGraph.addEdge(3,9,7);
         integerGraph.addEdge(11,12,1);
+        integerGraph.addEdge(11,13,2);
 
         testGraph.addEdge(1,3);
         testGraph.addEdge(1,2);
@@ -41,6 +44,8 @@ public class MainTest {
 
         System.out.println(integerGraph1);*/
 		//TODO: add to Graph funcs BFS,Dijkstra, ..
+        //TODO: divide test file to cases
+        //TODO: fix Dijkstra for directed?
         BFS<Integer, Integer> bfs = new BFS<>(integerGraph);
         BFS<Integer, Integer> bfs1 = new BFS<>(testGraph);
         Dijkstra<Integer> di = new Dijkstra<>(integerGraph);
@@ -49,7 +54,7 @@ public class MainTest {
         int end = 10;
 
 		System.out.println("bfs test from "+start+" to "+end);
-        System.out.println(bfs1.findPath(start, end).toString());
+        System.out.println(bfs1.findPath(start, end).toString()+"\n\n");
 
 		System.out.println("dijkstra from "+start);
 
@@ -59,6 +64,11 @@ public class MainTest {
 			System.out.println(el+": "+map.get(el));
 		}
 
-		System.out.println("Number of components: "+integerGraph.countComponents());
+		System.out.println("\n\nNumber of components: "+integerGraph.countComponents());
+
+        List<Graph<Integer,Integer>> components = integerGraph.getComponents();
+        for(Graph<Integer, Integer> graph: components){
+            System.out.println(graph);
+        }
     }
 }

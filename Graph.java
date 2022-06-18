@@ -156,9 +156,9 @@ public class Graph<E,K extends Number>{
     public int countComponents(){
     	int count = 0;
     	Graph<E,K> gr = this.getBidirectional();
-    	BFS<E,K> bfs = new BFS<E,K>(this);
+    	BFS<E,K> bfs = new BFS<>(gr);
 		Set<E> visited = new HashSet<>();
-		for(E el: (Set<E>)gr.getGraph().keySet()){
+		for(E el: gr.getGraph().keySet()){
 			if(!visited.contains(el)){
 				List<List<E>> lists = bfs.getBfs(el);
 				for(List<E> list: lists){
@@ -171,9 +171,32 @@ public class Graph<E,K extends Number>{
     }
 
     //TODO: finish getComponents()
-    //returns list of Graph<E>
+    //returns list of Graph<E,K>
     public List<Graph<E,K>> getComponents(){
         List<Graph<E,K>> result = new ArrayList<>();
+        Graph<E,K> gr = this.getBidirectional();
+        BFS<E,K> bfs = new BFS<>(gr);
+        Set<E> visited = new HashSet<>();
+        Set<E> component = new HashSet<>();
+        for(E el: gr.getGraph().keySet()){
+            if(!visited.contains(el)){
+                List<List<E>> lists = bfs.getBfs(el);
+                for(List<E> list: lists){
+                    visited.addAll(list);
+                    component.addAll(list);
+                }
+                Graph<E,K> currentGraph = new Graph<>(this.isBidirectional(), this.isWeighted());
+                for(E from: graph.keySet()){
+                    if(component.contains(from)){
+                        for(E to: graph.get(from).keySet()) {
+                            currentGraph.addEdge(from, to, graph.get(from).get(to));
+                        }
+                    }
+                }
+                result.add(currentGraph);
+                component.clear();
+            }
+        }
 
         return result;
     }
