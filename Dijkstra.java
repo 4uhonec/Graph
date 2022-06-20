@@ -1,17 +1,19 @@
 //TODO: Dijkstra works only for nonnegative weights
+//for now it gets Integer as weights
+
 import java.util.*;
 //bfs first to find accessible vertices
 public class Dijkstra<E>{
 	private HashMap<E,HashMap<E,Integer>> graphMap;
 	private Map<E,E> previous = new HashMap<>();
-	private BFS bfs;
+	private BFS<E, Integer> bfs;
 	private E startElement;
-	public Dijkstra(Graph graph){
+	public Dijkstra(Graph<E, Integer> graph){
 		if(!graph.isWeighted()){//TODO: return null in Graph's function
 			throw new RuntimeException("graph is not weighted");
 		}
 		this.graphMap = graph.getGraph();
-		this.bfs = new BFS(graph);
+		this.bfs = new BFS<>(graph);
 	}
 
 	public Map<E,Integer> getDist(E start){
@@ -38,7 +40,6 @@ public class Dijkstra<E>{
 		minHeap.add(start);
 		while(minHeap.size()>0){
 			E current = minHeap.poll();
-
 			for(E el: graphMap.get(current).keySet()){
 				if(result.containsKey(el)&&//maybe add check !minHeap.contains(el)
 				   result.get(current)+graphMap.get(current).get(el)<result.get(el)){
@@ -52,6 +53,7 @@ public class Dijkstra<E>{
 		return result;
 	}
 
+	//TODO: finish Dijkstra getPath - minimal weighted path
 	public List<E> getPath(){
 		List<E> res = new ArrayList<>();
 

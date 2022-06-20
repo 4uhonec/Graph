@@ -1,5 +1,5 @@
 import java.util.*;
-
+//TODO: make normal tests
 
 
 public class MainTest {
@@ -45,30 +45,33 @@ public class MainTest {
         System.out.println(integerGraph1);*/
 		//TODO: add to Graph funcs BFS,Dijkstra, ..
         //TODO: divide test file to cases
-        //TODO: fix Dijkstra for directed?
-        BFS<Integer, Integer> bfs = new BFS<>(integerGraph);
+        //BFS<Integer, Integer> bfs = new BFS<>(integerGraph);
         BFS<Integer, Integer> bfs1 = new BFS<>(testGraph);
         Dijkstra<Integer> di = new Dijkstra<>(integerGraph);
         
-        int start = 2;
+        int start = 1;
         int end = 10;
 
+        //bfs from start to end
 		System.out.println("bfs test from "+start+" to "+end);
         System.out.println(bfs1.findPath(start, end).toString()+"\n\n");
 
+        //Dijkstra from start
 		System.out.println("dijkstra from "+start);
-
 		Map<Integer, Integer> map = new HashMap<>(di.getDist(start));
-
 		for(Integer el: map.keySet()){
 			System.out.println(el+": "+map.get(el));
 		}
 
+        /*
+        //count graph components test
 		System.out.println("\n\nNumber of components: "+integerGraph.countComponents());
 
+        //get graph components, print them
         List<Graph<Integer,Integer>> components = integerGraph.getComponents();
         for(Graph<Integer, Integer> graph: components){
             System.out.println(graph);
         }
+        */
     }
 }

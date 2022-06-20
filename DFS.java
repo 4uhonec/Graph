@@ -13,12 +13,14 @@ public class DFS<E,K extends Number> {
     }
 
     //idea is to build hashmap from start, them in getDfs() we'll translate map to List<List> with BFS (-speed)
+    //maybe build new graph?
     private void buildDfs(){
 
     }
 
     public List<List<E>> getDfs(E start){
         startElement = start;
+        buildDfs();
 
         return layers;
     }
