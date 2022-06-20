@@ -41,7 +41,7 @@ public class Dijkstra<E>{
 		while(minHeap.size()>0){
 			E current = minHeap.poll();
 			for(E el: graphMap.get(current).keySet()){
-				if(result.containsKey(el)&&//maybe add check !minHeap.contains(el)
+				if(result.containsKey(el)&&
 				   result.get(current)+graphMap.get(current).get(el)<result.get(el)){
 				   		result.put(el,result.get(current)+graphMap.get(current).get(el));
 				   		previous.put(el,current);

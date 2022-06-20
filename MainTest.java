@@ -49,9 +49,10 @@ public class MainTest {
         BFS<Integer, Integer> bfs1 = new BFS<>(testGraph);
         Dijkstra<Integer> di = new Dijkstra<>(integerGraph);
         
-        int start = 1;
+        int start = 2;
         int end = 10;
 
+        /*
         //bfs from start to end
 		System.out.println("bfs test from "+start+" to "+end);
         System.out.println(bfs1.findPath(start, end).toString()+"\n\n");
@@ -62,6 +63,7 @@ public class MainTest {
 		for(Integer el: map.keySet()){
 			System.out.println(el+": "+map.get(el));
 		}
+        */
 
         /*
         //count graph components test
@@ -73,5 +75,13 @@ public class MainTest {
             System.out.println(graph);
         }
         */
+
+        //dfs
+        System.out.println("dfs test");
+        DFS<Integer,Integer> dfs = new DFS<>(integerGraph);
+        List<List<Integer>> lists = dfs.getDfs(start);
+        for(List<Integer> list: lists){
+            System.out.println(list);
+        }
     }
 }
